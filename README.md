@@ -45,14 +45,25 @@ pip install category_encoders optuna joblib requests
 
 Methodology
 
-Tabular Data Preprocessing-
+1.Tabular Data Preprocessing-
 
-What this step does
-
+#What this step does
 Cleans raw data
-
 Creates domain-aware features
-
 Removes data leakage
-
 Prepares data for ML models
+
+#Key Feature Engineering
+Temporal features: sale_year, property_age
+Target transformation: log_price
+Renovation indicator
+Geospatial features:
+Haversine distance to city center, water bodies, tech hub
+Location clustering using KMeans
+Target encoding for high-cardinality zipcode
+
+#Why this approach was used
+House prices are highly non-linear
+Location plays a dominant role in valuation
+Distance-based features encode spatial economics better than raw lat/long
+Target encoding preserves price information without exploding dimensionality
