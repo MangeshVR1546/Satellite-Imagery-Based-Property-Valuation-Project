@@ -43,27 +43,110 @@ pip install category_encoders optuna joblib requests
 | `image_features_training.npy`    | Extracted image feature vectors           |
 | `image_feature_ids_training.csv` | IDs corresponding to image features       |
 
-Methodology
 
-1.Tabular Data Preprocessing-
+## ▶️ Execution Steps
 
-#What this step does
-Cleans raw data
-Creates domain-aware features
-Removes data leakage
-Prepares data for ML models
+---
 
-#Key Feature Engineering
-Temporal features: sale_year, property_age
-Target transformation: log_price
-Renovation indicator
-Geospatial features:
-Haversine distance to city center, water bodies, tech hub
-Location clustering using KMeans
-Target encoding for high-cardinality zipcode
+### Step 1: Tabular Data Preprocessing
 
-#Why this approach was used
-House prices are highly non-linear
-Location plays a dominant role in valuation
-Distance-based features encode spatial economics better than raw lat/long
-Target encoding preserves price information without exploding dimensionality
+**Script:** Data preprocessing code  
+
+#### Input
+- `tabular_Dataset.csv`
+
+#### Output
+- `preprocessed_data.csv`
+- `zipcode_target_encoder.pkl`
+
+#### Purpose
+- Cleans raw data  
+- Creates spatial, temporal, and engineered features  
+
+---
+
+### Step 2: Satellite Image Download
+
+**Script:** Image fetching code  
+
+#### Input
+- `tabular_Dataset.csv`
+- Mapbox API Token
+
+#### Output
+- `satellite_images/`
+- `image_download_summary.csv`
+
+#### Purpose
+- Downloads satellite images using latitude & longitude  
+
+---
+
+### Step 3: Baseline Tabular Model Training
+
+**Script:** Baseline tabular model  
+
+#### Input
+- `preprocessed_data.csv`
+
+#### Output
+- Console metrics (R², RMSE)
+
+#### Purpose
+- Establishes tabular-only performance baseline  
+
+---
+
+### Step 4: Image Feature Extraction
+
+**Script:** Image feature extraction  
+
+#### Input
+- `satellite_images/`
+- `image_download_summary.csv`
+
+#### Output
+- `image_features_training.npy`
+- `image_feature_ids_training.csv`
+
+#### Purpose
+- Extracts visual features from satellite images (ResNet50)  
+- Uses random 20% sample for efficiency  
+
+---
+
+### Step 5: Multimodal Model Training
+
+**Script:** Multimodal training  
+
+#### Input
+- `preprocessed_data.csv`
+- `image_features_training.npy`
+- `image_feature_ids_training.csv`
+
+#### Output
+- `multimodal_pipeline.pkl`
+- Console metrics (R², RMSE)
+
+#### Purpose
+- Trains combined tabular + image model  
+
+---
+
+### Step 6: Test Set Prediction (Live Satellite)
+
+**Script:** Live multimodal prediction  
+
+#### Input
+- Test CSV  
+- `multimodal_pipeline.pkl`  
+- Mapbox API Token  
+
+#### Output
+- `24117072_final.csv`
+
+#### Purpose
+- Performs real-time satellite-based inference  
+
+---
+
