@@ -307,6 +307,7 @@ Raw CNN embeddings are high-dimensional and noisy. PCA preserves dominant visual
 #### Model architecture
 
 [ Tabular Features ] ─┐
+
 ├─> XGBoost Regressor
 
 [ Image PCA Features ]┘
