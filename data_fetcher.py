@@ -76,7 +76,7 @@ MAPBOX_TOKEN = "pk.eyJ1IjoibWFuZ2VzaDExMTExIiwiYSI6ImNtanBramluajA3ZTIzZXF4ZzFvZ
 
 # Download ALL 16K images (batch to avoid rate limits)
 summary = bulk_download_satellite_images(
-    '/content/train(1)(train(1)).csv',
+    '/content/tabular_Dataset.csv',
     MAPBOX_TOKEN,
     max_workers=5
 )
