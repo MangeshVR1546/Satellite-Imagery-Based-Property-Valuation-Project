@@ -235,6 +235,49 @@ This step extracts **deep visual features** from satellite images using a pretra
 #### Why a pretrained CNN?
 Training a CNN from scratch is infeasible due to dataset size and computational constraints. Models pretrained on ImageNet learn general-purpose visual representations that transfer well to satellite imagery. Using frozen features also reduces overfitting risk.
 
+#### Role of ResNet50 in This Project
+
+ResNet50 is used as a **deep feature extractor** to convert raw satellite images into meaningful numerical representations that can be consumed by traditional machine learning models.
+
+ResNet50 is a 50-layer deep convolutional neural network that uses **residual (skip) connections**, enabling stable training of very deep architectures. When pretrained on ImageNet, it learns rich hierarchical visual features such as edges, textures, shapes, and spatial patterns, which transfer well to satellite imagery.
+
+In this project:
+- The **pretrained ResNet50** model is loaded from `torchvision`
+- The final classification layer is removed
+- The network is used in **inference-only mode**
+- Each satellite image is converted into a **512-dimensional feature vector**
+
+These features capture:
+- Urban density patterns  
+- Road and building layouts  
+- Presence of greenery or water bodies  
+- Neighborhood-level visual structure  
+
+Using ResNet50 avoids the need to train a deep CNN from scratch, which would require significantly more labeled data and computational resources.
+
+---
+
+#### Why ResNet50 Was Chosen
+
+- **Proven architecture** with strong generalization ability  
+- **Pretrained weights** available for immediate use  
+- **Balanced depth** (deep enough to capture complex patterns, but not overly heavy)  
+- Widely used in **computer vision and satellite image analysis** tasks  
+
+Alternative architectures (e.g., training a custom CNN) were avoided due to limited data and higher overfitting risk.
+
+---
+
+#### Integration with the Multimodal Pipeline
+
+The ResNet50 image embeddings are:
+1. Scaled using `RobustScaler`
+2. Reduced in dimensionality using **PCA (512 → 64)**
+3. Concatenated with scaled tabular features
+4. Passed to an **XGBoost regressor** for final price prediction
+
+This design allows deep visual information to be incorporated into a **non-deep, interpretable multimodal regression framework**.
+
 #### Why sample only 20% of images?
 Satellite image processing is computationally expensive. Sampling a subset:
 - Keeps training feasible  
